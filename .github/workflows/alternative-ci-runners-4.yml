@@ -13,38 +13,37 @@ permissions:
   contents: read
 
 jobs:
-  docs-lint-on-x1-nvme:
-    uses: ./.github/workflows/_dagger_on_x1_nvme.yml
+  docs-lint-on-x2:
+    uses: ./.github/workflows/_dagger_on_x2.yml
     with:
       function: docs lint
       timeout: 20
-      nvme: 1
+      size: medium-15c
 
-  test-cli-engine-on-x1-nvme:
-    needs: docs-lint-on-x1-nvme
-    uses: ./.github/workflows/_dagger_on_x1_nvme.yml
+  test-cli-engine-on-x2:
+    needs: docs-lint-on-x2
+    uses: ./.github/workflows/_dagger_on_x2.yml
     with:
       function: test specific --run='TestCLI|TestEngine' --race=true --parallel=16
       timeout: 20
-      nvme: 1
+      size: medium-15c
 
-  sdk-go-on-x1-nvme:
-    needs: docs-lint-on-x1-nvme
-    uses: ./.github/workflows/_dagger_on_x1_nvme.yml
+  sdk-go-on-x2:
+    # needs: docs-lint-on-x2
+    uses: ./.github/workflows/_dagger_on_x2.yml
     with:
       function: check --targets=sdk/go
-      nvme: 2
+      size: small-7c
 
-  sdk-python-on-x1-nvme:
-    needs: docs-lint-on-x1-nvme
-    uses: ./.github/workflows/_dagger_on_x1_nvme.yml
+  sdk-python-on-x2:
+    # needs: docs-lint-on-x2
+    uses: ./.github/workflows/_dagger_on_x2.yml
     with:
       function: check --targets=sdk/python
-      nvme: 3
 
-  sdk-typescript-on-x1-nvme:
-    needs: docs-lint-on-x1-nvme
-    uses: ./.github/workflows/_dagger_on_x1_nvme.yml
+  sdk-typescript-on-x2:
+    # needs: docs-lint-on-x2
+    uses: ./.github/workflows/_dagger_on_x2.yml
     with:
       function: check --targets=sdk/typescript
-      nvme: 4
+      size: medium-15c
