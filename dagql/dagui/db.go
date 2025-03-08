@@ -97,6 +97,11 @@ func (db *DB) hasSeen(spanID SpanID) bool {
 
 func (db *DB) UpdatedSnapshots(filter map[SpanID]bool) []SpanSnapshot {
 	snapshots := snapshotSpans(db.updatedSpans.Order, func(span *Span) bool {
+		if !span.Received {
+			// never pass along any "stub" spans that we haven't actually received
+			// data for
+			return false
+		}
 		if filter == nil || filter[span.ParentID] {
 			// include subscribed (or all) spans
 			return true
